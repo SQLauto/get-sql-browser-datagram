@@ -23,8 +23,12 @@ function Get-SqlBrowserDatagram {
     $RemoteEndpoint = New-Object System.Net.IPEndPoint([System.Net.IPAddress]::Any, 0)
 
     try {
+        $BytesToTrimFromFront = 3
+
         $BytesReceived = $UdpClient.Receive([ref] $RemoteEndpoint)
-        $StringReceived = $Encoding.GetString($BytesReceived)
+        $BytesReceivedTrimmed = New-Object byte[] ($BytesReceived.Count - $BytesToTrimFromFront)
+        [System.Array]::Copy($BytesReceived, $BytesToTrimFromFront,  $BytesReceivedTrimmed, 0, $BytesReceived.Count - $BytesToTrimFromFront)
+        $StringReceived = $Encoding.GetString($BytesReceivedTrimmed)
 
         $StringReceived.Replace(";", "`r`n")
     }
