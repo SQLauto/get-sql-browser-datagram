@@ -1,7 +1,12 @@
+param (
+    [Parameter(Mandatory = $false)]
+    [string]$MachineName = $env:computername
+)
+
 function Get-SqlBrowserDatagram {
     param (
-        [Parameter(Mandatory = $false)]
-        [string]$MachineName = $env:COMPUTERNAME
+        [Parameter(Mandatory = $true)]
+        [string]$MachineName
     )
 
     $UdpClient = New-Object System.Net.Sockets.UdpClient
@@ -30,3 +35,5 @@ function Get-SqlBrowserDatagram {
         $UdpClient.Dispose()
     }
 }
+
+Get-SqlBrowserDatagram -MachineName $MachineName
